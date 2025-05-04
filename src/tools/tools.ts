@@ -1,6 +1,8 @@
 import {getCurrentWeather} from "./weather";
 import {getLocation} from "./location";
 import {getAQI} from "./aqi";
+import {getGeocoding} from "./geocoding";
+import {translateThaiCityNameToEnglish} from "./translator";
 
 export const tools = [
     {
@@ -38,6 +40,33 @@ export const tools = [
                 properties: {}
             }
         }
+    },
+    {
+        type: 'function',
+        function: {
+            name: 'getGeocoding',
+            description: 'Fetches geocoding data for a given city name. If the city name is not English, it should be translated to English before input it.',
+            parameters: {
+                type: 'object',
+                properties: {
+                    city: { type:'string' },
+                }
+            }
+        }
+    },
+    {
+        type: 'function',
+        function: {
+            name: 'translateThaiCityNameToEnglish',
+            description: 'Translates a Thai city name to English using the OpenAI API.',
+            parameters: {
+                type: 'object',
+                properties: {
+                    cityName: { type: 'string' },
+                    client: { type: 'object' },
+                }
+            }
+        }
     }
 ]
 
@@ -45,4 +74,6 @@ export const availableTools: {[key:string]: Function} = {
     'getLocation': getLocation,
     'getCurrentWeather': getCurrentWeather,
     'getAQI': getAQI,
+    'getGeocoding': getGeocoding,
+    'translateThaiCityNameToEnglish': translateThaiCityNameToEnglish,
 }

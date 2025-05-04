@@ -53,6 +53,9 @@ export class WeatherAgent {
                 const functionToCall = availableTools[functionName]
                 const functionArgs = JSON.parse(message.tool_calls![0].function.arguments)
                 const functionArgsArray = Object.values(functionArgs)
+                if(functionName === 'translateThaiCityNameToEnglish') {
+                    functionArgsArray.push(this.client)
+                }
                 const functionResponse = await functionToCall(...functionArgsArray)
 
 
