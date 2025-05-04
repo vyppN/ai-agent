@@ -1,5 +1,6 @@
 import {getCurrentWeather} from "./weather";
 import {getLocation} from "./location";
+import {getAirQualityIndex} from "./aqi";
 
 export const tools = [
     {
@@ -26,10 +27,22 @@ export const tools = [
                 }
             }
         }
+    },
+    {
+        type: 'function',
+        function:{
+            name: 'getAirQualityIndex',
+            description: 'Fetches the air quality index (AQI) data for current location. (This API knows the user location)',
+            parameters: {
+                type: 'object',
+                properties: {}
+            }
+        }
     }
 ]
 
 export const availableTools: {[key:string]: Function} = {
     'getLocation': getLocation,
-    'getCurrentWeather': getCurrentWeather
+    'getCurrentWeather': getCurrentWeather,
+    'getAirQualityIndex': getAirQualityIndex,
 }

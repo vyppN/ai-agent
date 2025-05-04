@@ -1,5 +1,6 @@
 import OpenAI from "openai";
-import {availableTools, tools} from "./tools";
+import {availableTools, tools} from "../tools/tools";
+import * as process from "node:process";
 
 /**
  * Represents a weather agent that can provide weather information.
@@ -30,14 +31,12 @@ export class WeatherAgent {
     askQuestion = async (message: string): Promise<string> => {
         this.messages.push({ role: 'user', content: message })
 
-        const MAX_ITERATIONS = 3;
+        const MAX_ITERATIONS = Object.keys(availableTools).length + 1;
         let iterations = 0;
 
         while (iterations < MAX_ITERATIONS) {
-            console.log(`Iteration: ${iterations}`)
-
             const response = await this.client.chat.completions.create({
-                model: 'gpt-4o-mini',
+                model: process.env.OPENAI_MODEL_NAME ?? 'gpt-4o-mini',
                 messages: this.messages as any,
                 temperature: 0.5,
                 tools: tools as any,
@@ -52,8 +51,6 @@ export class WeatherAgent {
 
             if (finish_reason === 'tool_calls') {
                 const functionName = message.tool_calls![0].function.name
-                console.log(`Calling function: ${functionName}`)
-
                 const functionToCall = availableTools[functionName]
                 const functionArgs = JSON.parse(message.tool_calls![0].function.arguments)
                 const functionArgsArray = Object.values(functionArgs)
